@@ -55,12 +55,8 @@ function Carousel({slides, interval=10000, renderSlide}){
           </div>
         ))}
       </div>
-      <div className="absolute left-3 top-1/2 transform -translate-y-1/2 z-20">
-        <button aria-label="Previous" onClick={() => setIndex(i => (i - 1 + slides.length) % slides.length)} className="p-3 bg-gray-800 text-white rounded-full shadow-lg hover:bg-gray-700 text-xl">‹</button>
-      </div>
-      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 z-20">
-        <button aria-label="Next" onClick={() => setIndex(i => (i + 1) % slides.length)} className="p-3 bg-gray-800 text-white rounded-full shadow-lg hover:bg-gray-700 text-xl">›</button>
-      </div>
+      <button aria-label="Previous" onClick={() => setIndex(i => (i - 1 + slides.length) % slides.length)} className="absolute -left-6 top-1/2 transform -translate-y-1/2 pointer-events-auto p-3 bg-transparent text-gray-600 rounded-full hover:text-gray-800 text-xl">‹</button>
+      <button aria-label="Next" onClick={() => setIndex(i => (i + 1) % slides.length)} className="absolute -right-6 top-1/2 transform -translate-y-1/2 pointer-events-auto p-3 bg-transparent text-gray-600 rounded-full hover:text-gray-800 text-xl">›</button>
       <div className="flex gap-2 justify-center mt-3">
         {slides.map((_, i) => (
           <button key={i} onClick={() => setIndex(i)} className={`w-2 h-2 rounded-full ${i===index? 'bg-gray-800':'bg-gray-300'}`} aria-label={`Go to ${i+1}`} />
