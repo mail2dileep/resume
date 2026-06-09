@@ -8,7 +8,10 @@ const data = {
   careerSnapshot: [
     '20+ years of experience leading enterprise QA organizations',
     'Led digital transformation programs and test automation initiatives',
-    'Built teams and processes for scalable delivery'
+    'Built teams and processes for scalable delivery',
+    'Omnicom – 6+ Years | QA Manager / QA Lead (Currently working)',
+     'Cognizant – 9+ Years | QA Manager / QA Lead',
+•	'AppLabs – 4+ Years | QA Automation Engineer / QA Engineer'
   ],
   aiInnovations: [
     'Built AI-powered web applications for enterprise accessibility testing (WCAG 2.1 AA)',
@@ -22,7 +25,7 @@ const data = {
     'Set technical vision and roadmaps',
     'Drove cross-functional impact and delivery'
   ],
-  skills: ['React','Node.js','Python','ML','MLOps','LLMs'],
-  leadership: ['Mentoring','Hiring','Roadmaps','OKRs']
+  skills: ['Playwright','Node.js','Selenium','ML','MLOps','LLMs'],
+  leadership: ['Quality Engineering Transformation ','AI Adoption Strategy','•	Test Automation Governance ','•	Quality Metrics & Reporting','•	Team Building & Mentoring']
 }
 export default data
