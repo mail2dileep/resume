@@ -11,7 +11,7 @@ const data = {
     'Built teams and processes for scalable delivery',
     'Omnicom – 6+ Years | QA Manager / QA Lead (Currently working)',
      'Cognizant – 9+ Years | QA Manager / QA Lead',
-•	'AppLabs – 4+ Years | QA Automation Engineer / QA Engineer'
+      'AppLabs – 4+ Years | QA Automation Engineer / QA Engineer'
   ],
   aiInnovations: [
     'Built AI-powered web applications for enterprise accessibility testing (WCAG 2.1 AA)',
@@ -26,6 +26,6 @@ const data = {
     'Drove cross-functional impact and delivery'
   ],
   skills: ['Playwright','Node.js','Selenium','ML','MLOps','LLMs'],
-  leadership: ['Quality Engineering Transformation ','AI Adoption Strategy','•	Test Automation Governance ','•	Quality Metrics & Reporting','•	Team Building & Mentoring']
+  leadership: ['Quality Engineering Transformation','AI Adoption Strategy','Test Automation Governance','Quality Metrics & Reporting','Team Building & Mentoring']
 }
 export default data
