@@ -4,23 +4,23 @@ import data from '../data'
 function renderContent(content){
   if (Array.isArray(content)){
     return (
-      <ul className="mt-3 text-sm text-gray-700 list-disc pl-5 space-y-2 leading-relaxed">
+      <ul className="mt-3 text-base text-gray-700 list-disc pl-5 space-y-2 leading-relaxed">
         {content.map((item, idx) => (
           <li key={idx} className="break-words">{item}</li>
         ))}
       </ul>
     )
   }
-  return <p className="mt-3 text-sm text-gray-700 leading-relaxed">{content}</p>
+  return <p className="mt-3 text-base text-gray-700 leading-relaxed">{content}</p>
 }
 
 function Card({title, children, accentClass=''}){
   return (
     <div className={`bg-white rounded-lg shadow p-6 flex-1 transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl border border-transparent hover:border-gray-100`}>
       <div className="flex items-start gap-3">
-        {accentClass && <div className={`${accentClass} shrink-0 w-10 h-10 rounded-full`} />}
-        <h3 className="font-semibold text-lg">{title}</h3>
-      </div>
+          {accentClass && <div className={`${accentClass} shrink-0 w-10 h-10 rounded-full`} />}
+          <h3 className="font-semibold text-xl">{title}</h3>
+        </div>
       <div>{children}</div>
     </div>
   )
@@ -29,8 +29,8 @@ function Card({title, children, accentClass=''}){
 function SkillChips({items, compact=false}){
   return (
     <div className="flex flex-wrap gap-2 mt-3">
-      {items.map(it => (
-        <span key={it} className={compact ? "inline-flex items-center px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-medium" : "inline-flex items-center px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-sm font-medium"}>{it}</span>
+        {items.map(it => (
+        <span key={it} className={compact ? "inline-flex items-center px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 text-sm font-medium" : "inline-flex items-center px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-base font-medium"}>{it}</span>
       ))}
     </div>
   )
@@ -94,7 +94,7 @@ export default function Cards(){
                   <div className="space-y-3">
                     {Object.entries(slide.content).map(([cat, items]) => (
                       <div key={cat}>
-                        <div className="text-sm font-medium text-gray-600">{cat}</div>
+                        <div className="text-base font-medium text-gray-600">{cat}</div>
                         <SkillChips items={items} compact />
                       </div>
                     ))}
