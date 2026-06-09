@@ -38,5 +38,8 @@ const data = {
     'Performance': ['JMeter','LoadRunner']
   },
   leadership: ['Quality Engineering Transformation','AI Adoption Strategy','Test Automation Governance','Quality Metrics & Reporting','Team Building & Mentoring']
+  ,
+  // Hero background image (QA strategy / AI adoption themed). Replace with your preferred image in /public
+  heroBackground: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=80'
 }
 export default data

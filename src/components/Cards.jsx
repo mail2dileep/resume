@@ -45,6 +45,8 @@ function Carousel({slides, visibleRatio=2.5, interval=5000, renderSlide}){
   const slideRefs = useRef([])
   const [slideHeight, setSlideHeight] = useState(null)
   const [isMobile, setIsMobile] = useState(false)
+  const containerRef = useRef(null)
+  const [containerWidth, setContainerWidth] = useState(0)
 
   // detect mobile (below Tailwind `md` breakpoint 768px)
   useEffect(() => {
@@ -59,7 +61,9 @@ function Carousel({slides, visibleRatio=2.5, interval=5000, renderSlide}){
 
   const effectiveVisibleRatio = isMobile ? 1 : visibleRatio
   const clones = Math.ceil(effectiveVisibleRatio)
-  const extended = [...slides, ...slides.slice(0, clones)]
+  const prefix = slides.slice(-clones)
+  const suffix = slides.slice(0, clones)
+  const extended = [...prefix, ...slides, ...suffix]
 
   useEffect(() => {
     if (!slides || slides.length === 0) return
@@ -87,39 +91,69 @@ function Carousel({slides, visibleRatio=2.5, interval=5000, renderSlide}){
     }
   }, [slides, slideHeight, effectiveVisibleRatio])
 
-  // reset when we've advanced past original slides
+  // measure container width in px for reliable translate calculations
   useEffect(() => {
-    if (index >= slides.length) {
+    function measureContainer(){
+      const w = containerRef.current ? containerRef.current.offsetWidth : 0
+      if (w && w !== containerWidth) setContainerWidth(w)
+    }
+    measureContainer()
+    const ro = new ResizeObserver(measureContainer)
+    if (containerRef.current) ro.observe(containerRef.current)
+    window.addEventListener('resize', measureContainer)
+    return () => { ro.disconnect(); window.removeEventListener('resize', measureContainer) }
+  }, [effectiveVisibleRatio, containerWidth])
+
+  // reset when we've advanced past original slides (handle prefix/suffix clones)
+  useEffect(() => {
+    const start = clones
+    const end = clones + slides.length
+    if (index >= end) {
       const t = setTimeout(() => {
         setIsTransitioning(false)
-        setIndex(0)
+        setIndex(start)
         requestAnimationFrame(() => requestAnimationFrame(() => setIsTransitioning(true)))
       }, 300)
       return () => clearTimeout(t)
     }
-  }, [index, slides.length])
+    if (index < start) {
+      const t = setTimeout(() => {
+        setIsTransitioning(false)
+        setIndex(end - 1)
+        requestAnimationFrame(() => requestAnimationFrame(() => setIsTransitioning(true)))
+      }, 300)
+      return () => clearTimeout(t)
+    }
+  }, [index, slides.length, clones])
 
   const slideWidth = 100 / effectiveVisibleRatio
   const trackWidth = extended.length * slideWidth
   const translate = -(index * slideWidth)
+  // pixel-based widths for more reliable transforms
+  const slideWidthPx = containerWidth ? Math.round(containerWidth / effectiveVisibleRatio) : 0
+  const trackWidthPx = slideWidthPx ? Math.round(extended.length * slideWidthPx) : 0
+  const translatePx = slideWidthPx ? Math.round(-index * slideWidthPx) : 0
 
   function prev(){ setIndex(i => (i - 1 + slides.length) % slides.length) }
   function next(){ setIndex(i => i + 1) }
 
   return (
     <div className="relative" onMouseEnter={() => (paused.current = true)} onMouseLeave={() => (paused.current = false)}>
-      <div className="overflow-hidden">
-        <div className="flex items-stretch transition-transform duration-300" style={{transform: `translateX(${translate}%)`, width: `${trackWidth}%`, transitionProperty: isTransitioning ? 'transform' : 'none'}}>
+      <div className="overflow-hidden" ref={containerRef}>
+        <div className="flex items-stretch transition-transform duration-300" style={{transform: containerWidth ? `translateX(${translatePx}px)` : `translateX(${translate}%)`, width: containerWidth ? `${trackWidthPx}px` : `${trackWidth}%`, transitionProperty: isTransitioning ? 'transform' : 'none'}}>
           {extended.map((s, i) => {
-            const orig = i % slides.length
+            // map refs only for original slides region
+            const origIndex = i - clones
+            const isOriginal = i >= clones && i < clones + slides.length
+            const renderIdx = isOriginal ? origIndex : (i - clones + slides.length) % slides.length
             return (
               <div
                 key={i}
-                ref={el => { slideRefs.current[orig] = el }}
-                style={{width: `${slideWidth}%`, height: slideHeight ? `${slideHeight}px` : 'auto'}}
+                ref={el => { if (isOriginal) slideRefs.current[origIndex] = el }}
+                style={containerWidth ? {width: `${slideWidthPx}px`, height: slideHeight ? `${slideHeight}px` : 'auto'} : {width: `${slideWidth}%`, height: slideHeight ? `${slideHeight}px` : 'auto'}}
                 className="px-2 h-full"
               >
-                {renderSlide(s, orig)}
+                {renderSlide(s, renderIdx)}
               </div>
             )
           })}
@@ -127,7 +161,7 @@ function Carousel({slides, visibleRatio=2.5, interval=5000, renderSlide}){
       </div>
 
       <div className="absolute inset-0 pointer-events-none">
-        <div className="hidden sm:block pointer-events-auto">
+        <div className="hidden md:block pointer-events-auto">
           <button aria-label="Previous" onClick={prev} className="absolute -left-8 top-1/2 transform -translate-y-1/2 p-4 bg-transparent text-gray-600 rounded-full hover:text-gray-800 text-3xl">‹</button>
           <button aria-label="Next" onClick={next} className="absolute -right-8 top-1/2 transform -translate-y-1/2 p-4 bg-transparent text-gray-600 rounded-full hover:text-gray-800 text-3xl">›</button>
         </div>

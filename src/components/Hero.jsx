@@ -2,8 +2,10 @@ import React from 'react'
 import data from '../data'
 
 export default function Hero(){
+  const bg = data.heroBackground || ''
+  const style = bg ? {backgroundImage: `linear-gradient(rgba(79,70,229,0.85), rgba(59,130,246,0.85)), url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center'} : {}
   return (
-    <section className="bg-gradient-to-r from-indigo-600 to-blue-500 rounded-xl p-8 text-white">
+    <section className="rounded-xl p-8 text-white" style={style}>
       <div className="md:flex md:items-center md:justify-between">
         <div>
           <h1 className="text-4xl font-extrabold">{data.name}</h1>
