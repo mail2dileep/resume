@@ -1,0 +1,11 @@
+services:
+  - type: static_site
+    name: resume-spa
+    env: node
+    branch: main
+    buildCommand: npm install && npm run build
+    publishPath: dist
+
+# Note: If you connect this repo to Render, Render will use this file to
+# auto-create a static site. If you host on GitHub, push the repo and then
+# connect the GitHub repo in the Render dashboard.
