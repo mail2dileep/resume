@@ -1,34 +1,6 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import data from '../data'
 
-function Icon({type}){
-  if (type === 'career'){
-    return (
-      <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-        <path d="M12 2v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M5 11h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M7 21h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    )
-  }
-  if (type === 'ai'){
-    return (
-      <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-        <path d="M12 2v2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M7 7l-2 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M17 7l2 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M12 22v-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    )
-  }
-  return (
-    <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <path d="M12 2l3 6 6 .5-4.5 3 1.5 6L12 16l-6 2 1.5-6L3 8.5 9 8 12 2z" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" fill="currentColor" />
-    </svg>
-  )
-}
-
-function renderContent(content){
 function renderContent(content){
   if (Array.isArray(content)){
     return (
@@ -42,7 +14,6 @@ function renderContent(content){
   return <p className="mt-3 text-sm text-gray-700 leading-relaxed">{content}</p>
 }
 
-function Card({title, content, accent='indigo', iconType=''}){
 function Card({title, children, accentClass=''}){
   return (
     <div className={`bg-white rounded-lg shadow p-6 flex-1 transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl border border-transparent hover:border-gray-100`}>
@@ -55,7 +26,44 @@ function Card({title, children, accentClass=''}){
   )
 }
 
-export default function Cards(){
+function SkillChips({items}){
+  return (
+    <div className="flex flex-wrap gap-2 mt-3">
+      {items.map(it => (
+        <span key={it} className="inline-flex items-center px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-sm font-medium">{it}</span>
+      ))}
+    </div>
+  )
+}
+
+function Carousel({slides, interval=10000, renderSlide}){
+  const [index, setIndex] = useState(0)
+  const paused = useRef(false)
+
+  useEffect(() => {
+    if (!slides || slides.length === 0) return
+    const id = setInterval(() => { if(!paused.current) setIndex(i => (i + 1) % slides.length) }, interval)
+    return () => clearInterval(id)
+  }, [slides, interval])
+
+  return (
+    <div className="relative" onMouseEnter={() => (paused.current = true)} onMouseLeave={() => (paused.current = false)}>
+      <div className="min-h-[140px]">
+        {slides.map((s, i) => (
+          <div key={i} className={`transition-opacity duration-700 ${i===index? 'opacity-100':'opacity-0 pointer-events-none'}`}>
+            {renderSlide(s, i)}
+          </div>
+        ))}
+      </div>
+      <div className="flex gap-2 justify-center mt-3">
+        {slides.map((_, i) => (
+          <button key={i} onClick={() => setIndex(i)} className={`w-2 h-2 rounded-full ${i===index? 'bg-gray-800':'bg-gray-300'}`} aria-label={`Go to ${i+1}`} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function Cards(){
   return (
     <div className="space-y-6">
