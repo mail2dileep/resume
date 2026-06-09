@@ -1,6 +1,6 @@
 const data = {
   name: 'Dileep Kumar',
-  designation: 'AI Leader · Engineering Manager · Innovator',
+  designation: 'Sr. QA Manager',
   resume: '/resume.pdf',
   linkedin: 'https://www.linkedin.com/in/your-profile',
   email: 'mail2dileep@gmail.com',
@@ -23,7 +23,11 @@ const data = {
   leadershipText: [
     'Built and mentored engineering teams',
     'Set technical vision and roadmaps',
-    'Drove cross-functional impact and delivery'
+    'Drove cross-functional impact and delivery',
+    'Quality Metrics & Reporting',
+    'Test Automation Governance',
+    'Quality Engineering Transformation',
+    'AI Adoption Strategy',
   ],
   skills: {
     'AI': ['OpenAI','Atlassian Rovo','MCP'],
