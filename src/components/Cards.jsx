@@ -26,11 +26,11 @@ function Card({title, children, accentClass=''}){
   )
 }
 
-function SkillChips({items}){
+function SkillChips({items, compact=false}){
   return (
     <div className="flex flex-wrap gap-2 mt-3">
       {items.map(it => (
-        <span key={it} className="inline-flex items-center px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-sm font-medium">{it}</span>
+        <span key={it} className={compact ? "inline-flex items-center px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-medium" : "inline-flex items-center px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-sm font-medium"}>{it}</span>
       ))}
     </div>
   )
@@ -48,18 +48,18 @@ function Carousel({slides, interval=10000, renderSlide}){
 
   return (
     <div className="relative" onMouseEnter={() => (paused.current = true)} onMouseLeave={() => (paused.current = false)}>
-      <div className="relative min-h-[180px]">
+      <div className="relative min-h-[140px]">
         {slides.map((s, i) => (
           <div key={i} className={`absolute inset-0 transition-opacity duration-700 ${i===index? 'opacity-100 z-10':'opacity-0 pointer-events-none z-0'}`}>
             {renderSlide(s, i)}
           </div>
         ))}
       </div>
-      <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-        <button aria-label="Previous" onClick={() => setIndex(i => (i - 1 + slides.length) % slides.length)} className="p-2 bg-white rounded-full shadow">‹</button>
+      <div className="absolute left-3 top-1/2 transform -translate-y-1/2 z-20">
+        <button aria-label="Previous" onClick={() => setIndex(i => (i - 1 + slides.length) % slides.length)} className="p-3 bg-gray-800 text-white rounded-full shadow-lg hover:bg-gray-700 text-xl">‹</button>
       </div>
-      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-        <button aria-label="Next" onClick={() => setIndex(i => (i + 1) % slides.length)} className="p-2 bg-white rounded-full shadow">›</button>
+      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 z-20">
+        <button aria-label="Next" onClick={() => setIndex(i => (i + 1) % slides.length)} className="p-3 bg-gray-800 text-white rounded-full shadow-lg hover:bg-gray-700 text-xl">›</button>
       </div>
       <div className="flex gap-2 justify-center mt-3">
         {slides.map((_, i) => (
@@ -84,34 +84,39 @@ export default function Cards(){
           {renderContent(data.leadershipText)}
         </Card>
       </div>
-
-      <div>
-        <h3 className="text-xl font-semibold mb-4">Skills & Leadership</h3>
-        <Carousel
-          slides={[
-            { type: 'skills' },
-            { type: 'leadership' }
-          ]}
-          interval={10000}
-          renderSlide={(slide) => (
-            slide.type === 'skills' ? (
-              <Card title="Skills">
-                <div className="space-y-4">
-                  {Object.entries(data.skills).map(([cat, items]) => (
-                    <div key={cat}>
-                      <div className="text-sm font-medium text-gray-600">{cat}</div>
-                      <SkillChips items={items} />
+      <div className="">
+        <h3 className="text-xl font-semibold mb-4 text-center">Skills & Leadership</h3>
+        <div className="max-w-3xl mx-auto">
+          <Carousel
+            slides={[
+              { type: 'skills' },
+              { type: 'leadership' }
+            ]}
+            interval={10000}
+            renderSlide={(slide) => (
+              slide.type === 'skills' ? (
+                <div className="p-2">
+                  <Card title="Skills">
+                    <div className="space-y-3">
+                      {Object.entries(data.skills).map(([cat, items]) => (
+                        <div key={cat}>
+                          <div className="text-sm font-medium text-gray-600">{cat}</div>
+                          <SkillChips items={items} compact />
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </Card>
                 </div>
-              </Card>
-            ) : (
-              <Card title="Leadership">
-                {renderContent(data.leadership)}
-              </Card>
-            )
-          )}
-        />
+              ) : (
+                <div className="p-2">
+                  <Card title="Leadership">
+                    {renderContent(data.leadership)}
+                  </Card>
+                </div>
+              )
+            )}
+          />
+        </div>
       </div>
     </div>
   )
