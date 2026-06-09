@@ -16,14 +16,14 @@ function renderContent(content){
 
 function Card({title, children, accentClass='', accentIcon=null}){
   return (
-    <div className={`bg-white rounded-lg shadow p-6 flex-1 transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl border border-transparent hover:border-gray-100`}>
+    <div className={`h-full flex flex-col bg-white rounded-lg shadow p-6 transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl border border-transparent hover:border-gray-100`}>
       <div className="flex items-start gap-3">
         {accentClass && (
           <div className={`${accentClass} shrink-0 w-10 h-10 rounded-full flex items-center justify-center`}>{accentIcon}</div>
         )}
         <h3 className="font-semibold text-xl">{title}</h3>
       </div>
-      <div>{children}</div>
+      <div className="mt-3 flex-1">{children}</div>
     </div>
   )
 }
@@ -42,6 +42,8 @@ function Carousel({slides, visibleRatio=2.5, interval=5000, renderSlide}){
   const [index, setIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(true)
   const paused = useRef(false)
+  const slideRefs = useRef([])
+  const [slideHeight, setSlideHeight] = useState(null)
 
   const clones = Math.ceil(visibleRatio)
   const extended = [...slides, ...slides.slice(0, clones)]
@@ -53,6 +55,24 @@ function Carousel({slides, visibleRatio=2.5, interval=5000, renderSlide}){
     }, interval)
     return () => clearInterval(id)
   }, [slides, interval])
+
+  // measure tallest slide (original slides) and set fixed height
+  useEffect(() => {
+    function measure(){
+      const heights = slideRefs.current.map(el => (el ? el.offsetHeight : 0))
+      const max = heights.length ? Math.max(...heights) : 0
+      if (max && max !== slideHeight) setSlideHeight(max)
+    }
+    // measure after render
+    measure()
+    const ro = new ResizeObserver(measure)
+    slideRefs.current.forEach(el => { if (el) ro.observe(el) })
+    window.addEventListener('resize', measure)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', measure)
+    }
+  }, [slides, slideHeight])
 
   // reset when we've advanced past original slides
   useEffect(() => {
@@ -66,8 +86,9 @@ function Carousel({slides, visibleRatio=2.5, interval=5000, renderSlide}){
     }
   }, [index, slides.length])
 
-  const percent = 100 / visibleRatio
-  const translate = -(index * 100) / extended.length
+  const slideWidth = 100 / visibleRatio
+  const trackWidth = extended.length * slideWidth
+  const translate = -(index * slideWidth)
 
   function prev(){ setIndex(i => (i - 1 + slides.length) % slides.length) }
   function next(){ setIndex(i => i + 1) }
@@ -75,12 +96,20 @@ function Carousel({slides, visibleRatio=2.5, interval=5000, renderSlide}){
   return (
     <div className="relative" onMouseEnter={() => (paused.current = true)} onMouseLeave={() => (paused.current = false)}>
       <div className="overflow-hidden">
-        <div className="flex transition-transform duration-300" style={{transform: `translateX(${translate}%)`, width: `${(extended.length * 100) / visibleRatio}%`, transitionProperty: isTransitioning ? 'transform' : 'none'}}>
-          {extended.map((s, i) => (
-            <div key={i} style={{width: `${100 / extended.length}%`}} className="px-2">
-              {renderSlide(s, i % slides.length)}
-            </div>
-          ))}
+        <div className="flex items-stretch transition-transform duration-300" style={{transform: `translateX(${translate}%)`, width: `${trackWidth}%`, transitionProperty: isTransitioning ? 'transform' : 'none'}}>
+          {extended.map((s, i) => {
+            const orig = i % slides.length
+            return (
+              <div
+                key={i}
+                ref={el => { slideRefs.current[orig] = el }}
+                style={{width: `${slideWidth}%`, height: slideHeight ? `${slideHeight}px` : 'auto'}}
+                className="px-2 h-full"
+              >
+                {renderSlide(s, orig)}
+              </div>
+            )
+          })}
         </div>
       </div>
 
@@ -133,7 +162,7 @@ export default function Cards(){
   return (
     <div className="space-y-6">
       <div className="w-full">
-        <h3 className="text-xl font-semibold mb-4 text-center">Overview</h3>
+        <h3 className="text-xl font-semibold mb-4 text-center">Career Summary</h3>
         <Carousel
           slides={slides}
           visibleRatio={2.5}
@@ -141,7 +170,7 @@ export default function Cards(){
           renderSlide={(slide) => {
             const accent = getAccent(slide.type)
             return (
-              <div className="p-2">
+              <div className="p-2 h-full">
                 <Card title={slide.title} accentClass={accent.cls} accentIcon={accent.icon}>
                   {slide.type === 'skills' ? (
                     <div className="space-y-3">
