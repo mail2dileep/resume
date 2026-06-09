@@ -8,7 +8,10 @@ export default function Hero(){
   return (
     <section className="w-full p-0 bg-transparent">
       {bg && (
-        <img src={bg} alt="hero" className="w-full h-auto object-contain block" />
+        <picture>
+          <source media="(max-width: 767px)" srcSet="/Resume_Image_mobile.png" />
+          <img src={bg} alt="hero" className="w-full h-auto object-contain block" />
+        </picture>
       )}
     </section>
   )
