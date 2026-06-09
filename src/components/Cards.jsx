@@ -44,8 +44,21 @@ function Carousel({slides, visibleRatio=2.5, interval=5000, renderSlide}){
   const paused = useRef(false)
   const slideRefs = useRef([])
   const [slideHeight, setSlideHeight] = useState(null)
+  const [isMobile, setIsMobile] = useState(false)
 
-  const clones = Math.ceil(visibleRatio)
+  // detect mobile (below Tailwind `md` breakpoint 768px)
+  useEffect(() => {
+    function onResize(){
+      if (typeof window === 'undefined') return
+      setIsMobile(window.innerWidth < 768)
+    }
+    onResize()
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  const effectiveVisibleRatio = isMobile ? 1 : visibleRatio
+  const clones = Math.ceil(effectiveVisibleRatio)
   const extended = [...slides, ...slides.slice(0, clones)]
 
   useEffect(() => {
@@ -72,7 +85,7 @@ function Carousel({slides, visibleRatio=2.5, interval=5000, renderSlide}){
       ro.disconnect()
       window.removeEventListener('resize', measure)
     }
-  }, [slides, slideHeight])
+  }, [slides, slideHeight, effectiveVisibleRatio])
 
   // reset when we've advanced past original slides
   useEffect(() => {
@@ -86,7 +99,7 @@ function Carousel({slides, visibleRatio=2.5, interval=5000, renderSlide}){
     }
   }, [index, slides.length])
 
-  const slideWidth = 100 / visibleRatio
+  const slideWidth = 100 / effectiveVisibleRatio
   const trackWidth = extended.length * slideWidth
   const translate = -(index * slideWidth)
 
