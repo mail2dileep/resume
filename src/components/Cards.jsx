@@ -76,7 +76,7 @@ export default function Cards(){
         <Card title="AI Innovations">
           {renderContent(data.aiInnovations)}
         </Card>
-        <Card title="Leadership Snapshot">
+        <Card title="Strategic Leadership">
           {renderContent(data.leadershipText)}
         </Card>
       </div>
