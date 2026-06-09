@@ -55,8 +55,14 @@ function Carousel({slides, interval=10000, renderSlide}){
           </div>
         ))}
       </div>
-      <button aria-label="Previous" onClick={() => setIndex(i => (i - 1 + slides.length) % slides.length)} className="absolute -left-6 top-1/2 transform -translate-y-1/2 pointer-events-auto p-3 bg-transparent text-gray-600 rounded-full hover:text-gray-800 text-xl">‹</button>
-      <button aria-label="Next" onClick={() => setIndex(i => (i + 1) % slides.length)} className="absolute -right-6 top-1/2 transform -translate-y-1/2 pointer-events-auto p-3 bg-transparent text-gray-600 rounded-full hover:text-gray-800 text-xl">›</button>
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="hidden sm:flex items-center justify-center h-full pointer-events-auto">
+          <div className="flex items-center gap-6">
+            <button aria-label="Previous" onClick={() => setIndex(i => (i - 1 + slides.length) % slides.length)} className="p-4 bg-transparent text-gray-600 rounded-full hover:text-gray-800 text-3xl">‹</button>
+            <button aria-label="Next" onClick={() => setIndex(i => (i + 1) % slides.length)} className="p-4 bg-transparent text-gray-600 rounded-full hover:text-gray-800 text-3xl">›</button>
+          </div>
+        </div>
+      </div>
       <div className="flex gap-2 justify-center mt-3">
         {slides.map((_, i) => (
           <button key={i} onClick={() => setIndex(i)} className={`w-2 h-2 rounded-full ${i===index? 'bg-gray-800':'bg-gray-300'}`} aria-label={`Go to ${i+1}`} />
@@ -67,52 +73,39 @@ function Carousel({slides, interval=10000, renderSlide}){
 }
 
 export default function Cards(){
+  const slides = [
+    { type: 'career', title: 'Career Snapshot', content: data.careerSnapshot },
+    { type: 'ai', title: 'AI Innovations', content: data.aiInnovations },
+    { type: 'skills', title: 'Skills Snapshot', content: data.skills },
+    { type: 'leadership', title: 'Leadership Snapshot', content: data.leadershipText }
+  ]
+
   return (
     <div className="space-y-6">
-      <div className="grid gap-6 md:grid-cols-3">
-        <Card title="Career Snapshot">
-          {renderContent(data.careerSnapshot)}
-        </Card>
-        <Card title="AI Innovations">
-          {renderContent(data.aiInnovations)}
-        </Card>
-        <Card title="Strategic Leadership">
-          {renderContent(data.leadershipText)}
-        </Card>
-      </div>
-      <div className="">
-        <h3 className="text-xl font-semibold mb-4 text-center">Skills & Leadership</h3>
-        <div className="max-w-3xl mx-auto">
-          <Carousel
-            slides={[
-              { type: 'skills' },
-              { type: 'leadership' }
-            ]}
-            interval={10000}
-            renderSlide={(slide) => (
-              slide.type === 'skills' ? (
-                <div className="p-2">
-                  <Card title="Skills">
-                    <div className="space-y-3">
-                      {Object.entries(data.skills).map(([cat, items]) => (
-                        <div key={cat}>
-                          <div className="text-sm font-medium text-gray-600">{cat}</div>
-                          <SkillChips items={items} compact />
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
-                </div>
-              ) : (
-                <div className="p-2">
-                  <Card title="Leadership">
-                    {renderContent(data.leadership)}
-                  </Card>
-                </div>
-              )
-            )}
-          />
-        </div>
+      <div className="max-w-3xl mx-auto">
+        <h3 className="text-xl font-semibold mb-4 text-center">Overview</h3>
+        <Carousel
+          slides={slides}
+          interval={10000}
+          renderSlide={(slide) => (
+            <div className="p-2">
+              <Card title={slide.title}>
+                {slide.type === 'skills' ? (
+                  <div className="space-y-3">
+                    {Object.entries(slide.content).map(([cat, items]) => (
+                      <div key={cat}>
+                        <div className="text-sm font-medium text-gray-600">{cat}</div>
+                        <SkillChips items={items} compact />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  renderContent(slide.content)
+                )}
+              </Card>
+            </div>
+          )}
+        />
       </div>
     </div>
   )
