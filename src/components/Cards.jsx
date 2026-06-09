@@ -29,6 +29,7 @@ function Icon({type}){
 }
 
 function renderContent(content){
+function renderContent(content){
   if (Array.isArray(content)){
     return (
       <ul className="mt-3 text-sm text-gray-700 list-disc pl-5 space-y-2 leading-relaxed">
@@ -42,31 +43,62 @@ function renderContent(content){
 }
 
 function Card({title, content, accent='indigo', iconType=''}){
-  const accentBg = {
-    indigo: 'bg-gradient-to-br from-indigo-500 to-indigo-400',
-    teal: 'bg-gradient-to-br from-teal-400 to-teal-300',
-    yellow: 'bg-gradient-to-br from-yellow-400 to-orange-300'
-  }[accent]
-
+function Card({title, children, accentClass=''}){
   return (
-    <div className="bg-white rounded-lg shadow p-6 flex-1 transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl border border-transparent hover:border-gray-100">
+    <div className={`bg-white rounded-lg shadow p-6 flex-1 transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl border border-transparent hover:border-gray-100`}>
       <div className="flex items-start gap-3">
-        <div className={`${accentBg} shrink-0 w-10 h-10 rounded-full flex items-center justify-center`}> 
-          <Icon type={iconType} />
-        </div>
+        {accentClass && <div className={`${accentClass} shrink-0 w-10 h-10 rounded-full`} />}
         <h3 className="font-semibold text-lg">{title}</h3>
       </div>
-      {renderContent(content)}
+      <div>{children}</div>
     </div>
   )
 }
 
 export default function Cards(){
+export default function Cards(){
   return (
-    <div className="grid gap-6 md:grid-cols-3">
-      <Card title="Career Snapshot" content={data.careerSnapshot} accent="indigo" iconType="career" />
-      <Card title="AI Innovations" content={data.aiInnovations} accent="teal" iconType="ai" />
-      <Card title="Leadership" content={data.leadershipText} accent="yellow" iconType="lead" />
+    <div className="space-y-6">
+      <div className="grid gap-6 md:grid-cols-3">
+        <Card title="Career Snapshot">
+          {renderContent(data.careerSnapshot)}
+        </Card>
+        <Card title="AI Innovations">
+          {renderContent(data.aiInnovations)}
+        </Card>
+        <Card title="Leadership Snapshot">
+          {renderContent(data.leadershipText)}
+        </Card>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-semibold mb-4">Skills & Leadership</h3>
+        <Carousel
+          slides={[
+            { type: 'skills' },
+            { type: 'leadership' }
+          ]}
+          interval={10000}
+          renderSlide={(slide) => (
+            slide.type === 'skills' ? (
+              <Card title="Skills">
+                <div className="space-y-4">
+                  {Object.entries(data.skills).map(([cat, items]) => (
+                    <div key={cat}>
+                      <div className="text-sm font-medium text-gray-600">{cat}</div>
+                      <SkillChips items={items} />
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            ) : (
+              <Card title="Leadership">
+                {renderContent(data.leadership)}
+              </Card>
+            )
+          )}
+        />
+      </div>
     </div>
   )
 }
