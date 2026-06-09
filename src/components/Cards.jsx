@@ -48,12 +48,18 @@ function Carousel({slides, interval=10000, renderSlide}){
 
   return (
     <div className="relative" onMouseEnter={() => (paused.current = true)} onMouseLeave={() => (paused.current = false)}>
-      <div className="min-h-[140px]">
+      <div className="relative min-h-[180px]">
         {slides.map((s, i) => (
-          <div key={i} className={`transition-opacity duration-700 ${i===index? 'opacity-100':'opacity-0 pointer-events-none'}`}>
+          <div key={i} className={`absolute inset-0 transition-opacity duration-700 ${i===index? 'opacity-100 z-10':'opacity-0 pointer-events-none z-0'}`}>
             {renderSlide(s, i)}
           </div>
         ))}
+      </div>
+      <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+        <button aria-label="Previous" onClick={() => setIndex(i => (i - 1 + slides.length) % slides.length)} className="p-2 bg-white rounded-full shadow">‹</button>
+      </div>
+      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+        <button aria-label="Next" onClick={() => setIndex(i => (i + 1) % slides.length)} className="p-2 bg-white rounded-full shadow">›</button>
       </div>
       <div className="flex gap-2 justify-center mt-3">
         {slides.map((_, i) => (
