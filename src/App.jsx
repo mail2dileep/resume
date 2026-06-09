@@ -8,7 +8,7 @@ export default function App() {
     <div className="min-h-screen bg-gray-50 text-gray-900">
       <header className="container mx-auto p-6">
         <nav className="flex justify-end gap-4">
-          <a href="/resume.pdf" className="text-sm text-blue-600">Download Resume</a>
+          {/* top-right download link removed */}
         </nav>
       </header>
       <main className="container mx-auto px-6 pb-12">
@@ -21,7 +21,7 @@ export default function App() {
         </section>
       </main>
       <footer className="border-t bg-white">
-        <div className="container mx-auto p-6 text-sm text-center text-gray-600">Made with ❤️ — Replace links & resume in <code>public/</code></div>
+        <div className="container mx-auto p-6 text-sm text-center text-gray-600"></div>
       </footer>
     </div>
   )
