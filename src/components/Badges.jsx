@@ -1,6 +1,17 @@
 import React from 'react'
 import data from '../data'
 
+function SkillChips({items, color='indigo'}){
+  const bg = color === 'indigo' ? 'bg-indigo-100 text-indigo-700' : 'bg-gray-100 text-gray-800'
+  return (
+    <div className="flex flex-wrap gap-2">
+      {items.map(item => (
+        <span key={item} className={`inline-flex items-center px-3 py-1 rounded-full ${bg} text-sm font-medium`}>{item}</span>
+      ))}
+    </div>
+  )
+}
+
 export default function Badges(){
   const skills = data.skills
   const leadership = data.leadership
