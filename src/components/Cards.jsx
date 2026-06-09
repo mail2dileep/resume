@@ -38,14 +38,13 @@ function SkillChips({items, compact=false}){
   )
 }
 
-function Carousel({slides, visibleCount=3, interval=5000, renderSlide}){
+function Carousel({slides, visibleRatio=2.5, interval=5000, renderSlide}){
   const [index, setIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(true)
   const paused = useRef(false)
-  const containerRef = useRef(null)
 
-  // create clones at end to allow smooth infinite scroll
-  const extended = [...slides, ...slides.slice(0, visibleCount)]
+  const clones = Math.ceil(visibleRatio)
+  const extended = [...slides, ...slides.slice(0, clones)]
 
   useEffect(() => {
     if (!slides || slides.length === 0) return
@@ -53,24 +52,22 @@ function Carousel({slides, visibleCount=3, interval=5000, renderSlide}){
       if (!paused.current) setIndex(i => i + 1)
     }, interval)
     return () => clearInterval(id)
-  }, [slides, interval, visibleCount])
+  }, [slides, interval])
 
   // reset when we've advanced past original slides
   useEffect(() => {
-    if (index === slides.length) {
-      // after transition ends, snap back to 0
+    if (index >= slides.length) {
       const t = setTimeout(() => {
         setIsTransitioning(false)
         setIndex(0)
-        // force reflow then re-enable transition
         requestAnimationFrame(() => requestAnimationFrame(() => setIsTransitioning(true)))
-      }, 300) // match CSS transition duration
+      }, 300)
       return () => clearTimeout(t)
     }
   }, [index, slides.length])
 
-  const percent = 100 / visibleCount
-  const translate = -index * percent
+  const percent = 100 / visibleRatio
+  const translate = -(index * 100) / extended.length
 
   function prev(){ setIndex(i => (i - 1 + slides.length) % slides.length) }
   function next(){ setIndex(i => i + 1) }
@@ -78,9 +75,9 @@ function Carousel({slides, visibleCount=3, interval=5000, renderSlide}){
   return (
     <div className="relative" onMouseEnter={() => (paused.current = true)} onMouseLeave={() => (paused.current = false)}>
       <div className="overflow-hidden">
-        <div ref={containerRef} className="flex transition-transform duration-300" style={{transform: `translateX(${translate}%)`, width: `${(extended.length * 100) / visibleCount}%`, transitionProperty: isTransitioning ? 'transform' : 'none'}}>
+        <div className="flex transition-transform duration-300" style={{transform: `translateX(${translate}%)`, width: `${(extended.length * 100) / visibleRatio}%`, transitionProperty: isTransitioning ? 'transform' : 'none'}}>
           {extended.map((s, i) => (
-            <div key={i} style={{flex: `0 0 ${percent}%`}} className="px-2">
+            <div key={i} style={{width: `${100 / extended.length}%`}} className="px-2">
               {renderSlide(s, i % slides.length)}
             </div>
           ))}
@@ -135,10 +132,11 @@ export default function Cards(){
   }
   return (
     <div className="space-y-6">
-      <div className="max-w-3xl mx-auto">
+      <div className="w-full">
         <h3 className="text-xl font-semibold mb-4 text-center">Overview</h3>
         <Carousel
           slides={slides}
+          visibleRatio={2.5}
           interval={5000}
           renderSlide={(slide) => {
             const accent = getAccent(slide.type)
