@@ -36,7 +36,7 @@ function SkillChips({items, compact=false}){
   )
 }
 
-function Carousel({slides, interval=10000, renderSlide}){
+function Carousel({slides, interval=5000, renderSlide}){
   const [index, setIndex] = useState(0)
   const paused = useRef(false)
 
@@ -86,7 +86,7 @@ export default function Cards(){
         <h3 className="text-xl font-semibold mb-4 text-center">Overview</h3>
         <Carousel
           slides={slides}
-          interval={10000}
+          interval={5000}
           renderSlide={(slide) => (
             <div className="p-2">
               <Card title={slide.title}>
