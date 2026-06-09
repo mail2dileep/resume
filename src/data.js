@@ -25,7 +25,15 @@ const data = {
     'Set technical vision and roadmaps',
     'Drove cross-functional impact and delivery'
   ],
-  skills: ['Playwright','Node.js','Selenium','ML','MLOps','LLMs'],
+  skills: ['Playwright','Node.js','Selenium','Oracle','','LLMs'],
+    skills: {
+      'AI': ['OpenAI','Atlassian Rovo','MCP'],
+      'Automation': ['Playwright','Selenium','Leapwork','IBM RFT'],
+      'Languages': ['Python','Java','SQL','Unix Shell Scripting'],
+      'Platforms': ['Adobe Experience Manager (AEM)','Drupal','Oracle OFSAA'],
+      'Tools': ['Jira','Azure DevOps','Rally','HP ALM'],
+      'Performance': ['JMeter','LoadRunner']
+    },
   leadership: ['Quality Engineering Transformation','AI Adoption Strategy','Test Automation Governance','Quality Metrics & Reporting','Team Building & Mentoring']
 }
 export default data
