@@ -206,6 +206,11 @@ export default function Cards(){
         return { cls: 'bg-gray-100 text-gray-700', icon: null }
     }
   }
+  const productSlides = [
+    { src: '/AssureAccess.png', title: 'AssureAccess' },
+    { src: '/AssureMatch.png', title: 'AssureMatch' },
+    { src: '/RovoWorkflow.png', title: 'RovoWorkflow' }
+  ]
   return (
     <div className="space-y-6">
       <div className="w-full">
@@ -236,6 +241,35 @@ export default function Cards(){
             )
           }}
         />
+        
+        {/* Banner after the carousel */}
+        <div className="mt-6 flex justify-center">
+          <div className="bg-gradient-to-r from-indigo-50 to-white border-l-4 border-indigo-500 rounded-md p-4 text-center w-full">
+            <p className="text-sm md:text-base text-gray-800 font-medium">Innovation Lab — AI-Powered Quality Engineering Accelerators developed to improve quality, accessibility, migration validation, and team productivity.</p>
+          </div>
+        </div>
+
+        {/* Product carousel (compact image carousel) */}
+        <div className="mt-6 max-w-3xl mx-auto">
+          <Carousel
+            slides={productSlides}
+            visibleRatio={1}
+            interval={5000}
+            renderSlide={(item) => (
+              <div className="h-full">
+                <div className="bg-white rounded-lg shadow overflow-hidden border border-transparent">
+                  <div className="relative">
+                    <img src={item.src} alt={item.title} className="w-full h-72 md:h-96 object-contain block bg-white" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+                    <div className="absolute left-4 right-4 bottom-3">
+                      <h4 className="text-white text-sm md:text-base font-semibold bg-black/40 inline-block px-2 py-1 rounded">{item.title}</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          />
+        </div>
       </div>
     </div>
   )
