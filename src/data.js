@@ -40,6 +40,6 @@ const data = {
   leadership: ['Quality Engineering Transformation','AI Adoption Strategy','Test Automation Governance','Quality Metrics & Reporting','Team Building & Mentoring']
   ,
   // Hero background image (QA strategy / AI adoption themed). Replace with your preferred image in /public
-  heroBackground: '/Resume_Image2.png'
+  heroBackground: '/Resume_Desktop.png'
 }
 export default data
