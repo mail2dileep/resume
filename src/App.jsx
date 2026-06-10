@@ -6,10 +6,10 @@ import data from './data'
 export default function App() {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
-      <Hero />
       <header className="container mx-auto p-6">
       </header>
       <main className="container mx-auto px-6 pb-12">
+        <Hero />
         <div className="container mx-auto px-6 mt-6 flex justify-center">
           <div className="flex flex-wrap gap-3">
             <a href={data.resume} download className="px-4 py-2 bg-white text-indigo-700 rounded-md font-semibold">Download Resume</a>
