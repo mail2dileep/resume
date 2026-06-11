@@ -16,7 +16,7 @@ export default function Hero(){
           </div>
           {/* Desktop: constrained to container so it aligns with carousel (no full-bleed) */}
           <div className="hidden md:block">
-            <div className="container mx-auto px-6">
+            <div className="container mx-auto">
               <img src={bg || '/Resume_Image.png'} alt="hero" className="w-full h-auto object-contain block mx-auto" />
             </div>
           </div>

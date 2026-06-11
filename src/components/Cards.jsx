@@ -308,7 +308,7 @@ export default function Cards(){
               <div className="h-full">
                 <div className="bg-white rounded-lg shadow overflow-hidden border border-transparent">
                   <div className="relative">
-                    <img src={item.src} alt={item.title} className="w-full h-72 md:h-96 object-contain block bg-white" />
+                    <img src={item.src} alt={item.title} className="w-full h-96 md:h-[520px] object-contain block bg-white" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
                     <div className="absolute left-4 right-4 bottom-3">
                       <h4 className="text-white text-sm md:text-base font-semibold bg-black/40 inline-block px-2 py-1 rounded">{item.title}</h4>
