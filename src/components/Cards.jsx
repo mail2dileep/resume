@@ -76,14 +76,16 @@ function Carousel({slides, visibleRatio=2.5, interval=5000, renderSlide}){
   // measure tallest slide (original slides) and set fixed height
   useEffect(() => {
     function measure(){
-      const heights = slideRefs.current.map(el => (el ? el.offsetHeight : 0))
+      // Only consider the original slides refs (ensure length matches slides)
+      const refs = (slideRefs.current || []).slice(0, slides.length).filter(Boolean)
+      const heights = refs.map(el => Math.round(el.getBoundingClientRect().height || 0))
       const max = heights.length ? Math.max(...heights) : 0
       if (max && max !== slideHeight) setSlideHeight(max)
     }
-    // measure after render
-    measure()
+    // measure after render (allow layout/images to settle)
+    requestAnimationFrame(() => measure())
     const ro = new ResizeObserver(measure)
-    slideRefs.current.forEach(el => { if (el) ro.observe(el) })
+    ;(slideRefs.current || []).forEach(el => { if (el) ro.observe(el) })
     window.addEventListener('resize', measure)
     return () => {
       ro.disconnect()
