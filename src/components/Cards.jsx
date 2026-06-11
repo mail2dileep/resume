@@ -23,7 +23,7 @@ function Card({title, children, accentClass='', accentIcon=null}){
         )}
         <h3 className="font-semibold text-xl">{title}</h3>
       </div>
-      <div className="mt-3 flex-1">{children}</div>
+      <div className="mt-3">{children}</div>
     </div>
   )
 }
