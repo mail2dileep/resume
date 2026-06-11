@@ -240,7 +240,9 @@ export default function Cards(){
   const productSlides = [
     { src: '/AssureAccess.png', title: 'AssureAccess' },
     { src: '/AssureMatch.png', title: 'AssureMatch' },
-    { src: '/RovoWorkflow.png', title: 'RovoWorkflow' }
+    { src: '/RovoWorkflow.png', title: 'RovoWorkflow' },
+    { src: '/AssureRegress.png', title: 'AssureRegress' },
+    { src: '/AssureScan.png', title: 'AssureScan' }
   ]
   return (
     <div className="space-y-6">
