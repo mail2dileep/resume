@@ -17,7 +17,7 @@ function renderContent(content){
 function Card({title, children, accentClass='', accentIcon=null}){
   return (
     <div className={`h-full flex flex-col bg-white rounded-lg shadow p-6 transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl border border-transparent hover:border-gray-100`}>
-      <div className="flex items-start gap-3">
+      <div className="flex flex-col items-center gap-3 text-center">
         {accentClass && (
           <div className={`${accentClass} shrink-0 w-10 h-10 rounded-full flex items-center justify-center`}>{accentIcon}</div>
         )}
@@ -217,7 +217,7 @@ export default function Cards(){
         <h3 className="text-xl font-semibold mb-4 text-center">Career Summary</h3>
         <Carousel
           slides={slides}
-          visibleRatio={2.5}
+          visibleRatio={3}
           interval={5000}
           renderSlide={(slide) => {
             const accent = getAccent(slide.type)
@@ -234,7 +234,25 @@ export default function Cards(){
                       ))}
                     </div>
                   ) : (
-                    renderContent(slide.content)
+                    <>
+                      {renderContent(slide.content)}
+                      {slide.type === 'ai' && (
+                        <div className="mt-6 flex justify-center">
+                          <a
+                            href="#product-carousel"
+                            onClick={(e) => {
+                              e.preventDefault()
+                              const el = document.getElementById('product-carousel')
+                              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                            }}
+                            aria-label="View product carousel innovations"
+                            className="inline-flex items-center px-3 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                          >
+                            View Innovations
+                          </a>
+                        </div>
+                      )}
+                    </>
                   )}
                 </Card>
               </div>
@@ -250,7 +268,7 @@ export default function Cards(){
         </div>
 
         {/* Product carousel (compact image carousel) */}
-        <div className="mt-6 max-w-3xl mx-auto">
+        <div id="product-carousel" className="mt-6 max-w-3xl mx-auto">
           <Carousel
             slides={productSlides}
             visibleRatio={1}
