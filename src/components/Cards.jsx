@@ -47,6 +47,9 @@ function Carousel({slides, visibleRatio=2.5, interval=5000, renderSlide}){
   const [isMobile, setIsMobile] = useState(false)
   const containerRef = useRef(null)
   const [containerWidth, setContainerWidth] = useState(0)
+  const pointerStart = useRef(null)
+  const pointerDelta = useRef(0)
+  const isPointerDown = useRef(false)
 
   // detect mobile (below Tailwind `md` breakpoint 768px)
   useEffect(() => {
@@ -139,9 +142,35 @@ function Carousel({slides, visibleRatio=2.5, interval=5000, renderSlide}){
   function prev(){ setIndex(i => (i - 1 + slides.length) % slides.length) }
   function next(){ setIndex(i => i + 1) }
 
+  function handlePointerDown(e){
+    // only handle touch/pen pointers for swipe on mobile
+    if (e.pointerType && e.pointerType === 'mouse') return
+    isPointerDown.current = true
+    pointerStart.current = e.clientX
+    pointerDelta.current = 0
+    paused.current = true
+    try { e.currentTarget.setPointerCapture && e.currentTarget.setPointerCapture(e.pointerId) } catch(_){}
+  }
+  function handlePointerMove(e){
+    if (!isPointerDown.current) return
+    pointerDelta.current = e.clientX - (pointerStart.current || 0)
+  }
+  function handlePointerUp(e){
+    if (!isPointerDown.current) return
+    isPointerDown.current = false
+    paused.current = false
+    const delta = pointerDelta.current || 0
+    const threshold = Math.max(40, (containerWidth || 320) * 0.08)
+    if (delta > threshold) prev()
+    else if (delta < -threshold) next()
+    pointerStart.current = null
+    pointerDelta.current = 0
+    try { e.currentTarget.releasePointerCapture && e.currentTarget.releasePointerCapture(e.pointerId) } catch(_){}
+  }
+
   return (
     <div className="relative" onMouseEnter={() => (paused.current = true)} onMouseLeave={() => (paused.current = false)}>
-      <div className="overflow-hidden" ref={containerRef}>
+      <div className="overflow-hidden" ref={containerRef} style={{touchAction: 'pan-y'}} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerCancel={handlePointerUp}>
         <div className="flex items-stretch transition-transform duration-300" style={{transform: containerWidth ? `translateX(${translatePx}px)` : `translateX(${translate}%)`, width: containerWidth ? `${trackWidthPx}px` : `${trackWidth}%`, transitionProperty: isTransitioning ? 'transform' : 'none'}}>
           {extended.map((s, i) => {
             // map refs only for original slides region
