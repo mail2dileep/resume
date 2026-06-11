@@ -11,7 +11,7 @@ function renderContent(content){
       </ul>
       
     )
-    console.log('rendering array content')
+    
   }
   return <p className="mt-3 text-base text-gray-700 leading-relaxed">{content}</p>
 }
