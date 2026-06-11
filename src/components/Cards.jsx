@@ -38,7 +38,7 @@ function SkillChips({items, compact=false}){
   )
 }
 
-function Carousel({slides, visibleRatio=2.5, interval=5000, renderSlide}){
+function Carousel({slides, visibleRatio=2.5, interval=10000, renderSlide}){
   const [index, setIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(true)
   const paused = useRef(false)
@@ -249,7 +249,7 @@ export default function Cards(){
         <Carousel
           slides={slides}
           visibleRatio={3}
-          interval={5000}
+          interval={10000}
           renderSlide={(slide) => {
             const accent = getAccent(slide.type)
             return (
@@ -303,7 +303,7 @@ export default function Cards(){
           <Carousel
             slides={productSlides}
             visibleRatio={1}
-            interval={5000}
+            interval={10000}
             renderSlide={(item) => (
               <div className="h-full">
                 <div className="bg-white rounded-lg shadow overflow-hidden border border-transparent">

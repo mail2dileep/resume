@@ -12,7 +12,7 @@ function SkillChips({items, color='indigo'}){
   )
 }
 
-function Carousel({slides, interval = 5000, renderSlide}){
+function Carousel({slides, interval = 10000, renderSlide}){
   const [index, setIndex] = useState(0)
   const paused = useRef(false)
 
@@ -61,7 +61,7 @@ export default function Badges(){
         ) : (
           <Carousel
             slides={Object.entries(skills)}
-            interval={5000}
+            interval={10000}
             renderSlide={([cat, items]) => (
               <div>
                 <div className="text-sm font-medium text-gray-600 mb-2">{cat}</div>
@@ -79,7 +79,7 @@ export default function Badges(){
             for (let i=0;i<leadership.length;i+=2) chunk.push(leadership.slice(i,i+2))
             return chunk
           })()}
-          interval={5000}
+          interval={10000}
           renderSlide={(items) => (
             <div className="flex flex-wrap gap-2">
               {items.map(item => (
