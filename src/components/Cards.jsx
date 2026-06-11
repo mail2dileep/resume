@@ -9,6 +9,7 @@ function renderContent(content){
           <li key={idx} className="break-words">{item}</li>
         ))}
       </ul>
+      console.log('rendering array content')
     )
   }
   return <p className="mt-3 text-base text-gray-700 leading-relaxed">{content}</p>
